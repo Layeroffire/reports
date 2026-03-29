@@ -1,0 +1,11 @@
+private String getCurrentUserId() {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String username = auth.getName();
+
+    User user =
+        userPersistenceOutPort
+            .findByUserName(username)
+            .orElseThrow(() -> new DomainException("User not found", UserErrorCode.USER_NOT_FOUND));
+
+    return user.getId();
+  }
