@@ -1,0 +1,17 @@
+  @Override
+  public UserPageResponse findPaged(GetUsersPageCommand command) {
+    Sort sort = parseSort(command.sort());
+    int requestedPageOneBased = Math.max(1, command.page());
+    Pageable pageable = PageRequest.of(requestedPageOneBased - 1, command.size(), sort);
+
+    Page<UserEntity> page = userJpaRepository.findAll(pageable);
+
+    return UserPageResponse.builder()
+        .page(page.getNumber() + 1)
+        .size(page.getSize())
+        .totalElements(page.getTotalElements())
+        .totalPages(page.getTotalPages())
+        .sort(sort.toString())
+        .items(page.map(this::toSummary).getContent())
+        .build();
+  }
