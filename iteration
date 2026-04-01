@@ -1,0 +1,9 @@
+
+
+public List<ProcessingResult> processAll(List<Object> commands, String communityId) {
+
+    return commands.stream()
+        .filter(Objects::nonNull)
+        .map(cmd -> process(cmd, communityId, true))
+        .toList();
+  }
