@@ -1,4 +1,15 @@
-
+List<Object> commands =
+        Arrays.asList(
+            command.energy(),
+            command.waterSupply(),
+            command.heating(),
+            command.gasSupply(),
+            command.sewage(),
+            command.medical(),
+            command.geriatric(),
+            command.preschool(),
+            command.generalEducation(),
+            command.higherEducation());
 
 public List<ProcessingResult> processAll(List<Object> commands, String communityId) {
 
