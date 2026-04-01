@@ -1,0 +1,23 @@
+try {
+      String createdReportId =
+          createReportInPort.invoke(
+              CreateReportCommand.builder()
+                  .eventId(request.eventId())
+                  .note(request.note())
+                  .energy(request.energy())
+                  .waterSupply(request.waterSupply())
+                  .heating(request.heating())
+                  .gasSupply(request.gasSupply())
+                  .sewage(request.sewage())
+                  .medical(request.medical())
+                  .geriatric(request.geriatric())
+                  .preschool(request.preschool())
+                  .generalEducation(request.generalEducation())
+                  .higherEducation(request.higherEducation())
+                  .build());
+
+      return ResponseEntity.ok(createdReportId);
+    } catch (Exception e) {
+      log.error("Error on report creation: {}", e.getMessage(), e);
+      throw e;
+    }
