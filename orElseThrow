@@ -1,0 +1,7 @@
+Event event =
+        eventPersistenceOutPort
+            .findById(command.eventId())
+            .orElseThrow(
+                () ->
+                    new DomainException(
+                        "Event not found with id: " + command.eventId(), EVENT_NOT_FOUND));
