@@ -1,0 +1,15 @@
+@Override
+  public List<Event> findByCommunityIdAndStatuses(String communityId, Set<EventStatus> statuses) {
+    log.debug("Finding events by communityId: {} and statuses: {}", communityId, statuses);
+    List<EventStatus> statusesList = statuses != null ? List.copyOf(statuses) : null;
+    return sortEventsByUpdatedAtDesc(
+        eventJpaRepository.findByCommunityIdAndStatuses(communityId, statusesList).stream()
+            .map(eventMapper::toDomain)
+            .collect(Collectors.toList()));
+  }
+-----------------------------------------------------------------------------------------------------------------------
+private List<Event> sortEventsByUpdatedAtDesc(List<Event> events) {
+    return events.stream()
+        .sorted(Comparator.comparing(Event::getUpdatedAt, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
+        .collect(Collectors.toList());
+  }
