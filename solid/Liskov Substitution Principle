@@ -1,0 +1,20 @@
+class Bird {
+}
+
+interface FlyingBird {
+    void fly();
+}
+----------------------------------------------------
+class Sparrow extends Bird implements FlyingBird {
+    public void fly() {
+        System.out.println("Flying...");
+    }
+}
+
+class Penguin extends Bird {
+    // не літає
+}
+----------------------------------------------------
+public void makeBirdFly(FlyingBird bird) {
+    bird.fly();
+}
