@@ -1,0 +1,31 @@
+public class OrderRepository {
+    public void save(Order order) {
+        System.out.println("Збереження замовлення " + order.getId() + " в базу даних");
+    }
+}
+----------------------------------------------------------------------------------------
+public class EmailService {
+    public void sendOrderConfirmation(Order order) {
+        System.out.println("Відправка email по замовленню " + order.getId());
+    }
+}
+----------------------------------------------------------------------------------------
+public class InvoiceGenerator {
+    public void generate(Order order) {
+        System.out.println("Генерація PDF для замовлення " + order.getId());
+    }
+}
+----------------------------------------------------------------------------------------
+public class Main {
+    public static void main(String[] args) {
+        Order order = new Order("ORD-101", 2500.0);
+
+        OrderRepository repository = new OrderRepository();
+        EmailService emailService = new EmailService();
+        InvoiceGenerator invoiceGenerator = new InvoiceGenerator();
+
+        repository.save(order);
+        emailService.sendOrderConfirmation(order);
+        invoiceGenerator.generate(order);
+    }
+}
