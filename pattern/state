@@ -1,0 +1,80 @@
+public interface ParcelState {
+    void next(ParcelContext context);
+    String getName();
+}
+---------------------------------------------------
+public class CreatedState implements ParcelState {
+
+    @Override
+    public void next(ParcelContext context) {
+        context.setState(new InTransitState());
+    }
+
+    @Override
+    public String getName() {
+        return "CREATED";
+    }
+}
+---------------------------------------------------
+public class InTransitState implements ParcelState {
+
+    @Override
+    public void next(ParcelContext context) {
+        context.setState(new DeliveredState());
+    }
+
+    @Override
+    public String getName() {
+        return "IN_TRANSIT";
+    }
+}
+---------------------------------------------------
+public class DeliveredState implements ParcelState {
+
+    @Override
+    public void next(ParcelContext context) {
+        throw new IllegalStateException("Parcel already delivered");
+    }
+
+    @Override
+    public String getName() {
+        return "DELIVERED";
+    }
+}
+---------------------------------------------------
+public class ParcelContext {
+
+    private ParcelState state;
+
+    public ParcelContext() {
+        this.state = new CreatedState();
+    }
+
+    public void setState(ParcelState state) {
+        this.state = state;
+    }
+
+    public void nextState() {
+        state.next(this);
+    }
+
+    public String getState() {
+        return state.getName();
+    }
+}
+---------------------------------------------------
+public class Main {
+    public static void main(String[] args) {
+        ParcelContext parcel = new ParcelContext();
+
+        System.out.println(parcel.getState()); // CREATED
+
+        parcel.nextState();
+        System.out.println(parcel.getState()); // IN_TRANSIT
+
+        parcel.nextState();
+        System.out.println(parcel.getState()); // DELIVERED
+
+        parcel.nextState(); // Exception
+    }
+}
