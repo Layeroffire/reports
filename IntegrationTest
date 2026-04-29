@@ -369,6 +369,38 @@ class VoluntaryUnitControllerIntegrationTest extends TestContainers {
     }
 }
 ------------------------------------------------------------------------
+package com.ubgd.volunteercore;
+
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.utility.DockerImageName;
+
+public abstract class TestContainers {
+
+    private static final DockerImageName POSTGIS_IMAGE =
+            DockerImageName.parse("postgis/postgis:16-3.4")
+                    .asCompatibleSubstituteFor("postgres");
+
+    protected static final PostgreSQLContainer<?> DATABASE_CONTAINER =
+            new PostgreSQLContainer<>(POSTGIS_IMAGE)
+                    .withDatabaseName("postgres")
+                    .withUsername("postgres")
+                    .withPassword("postgres");
+
+    static {
+        DATABASE_CONTAINER.start();
+    }
+
+    @DynamicPropertySource
+    static void configureDataSource(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", DATABASE_CONTAINER::getJdbcUrl);
+        registry.add("spring.datasource.username", DATABASE_CONTAINER::getUsername);
+        registry.add("spring.datasource.password", DATABASE_CONTAINER::getPassword);
+        registry.add("spring.datasource.driver-class-name", DATABASE_CONTAINER::getDriverClassName);
+    }
+}
+------------------------------------------------------------------------
 INSERT INTO regions (region_id, region_name, region_type, state_id, district_id, geom)
 VALUES (
     1,
